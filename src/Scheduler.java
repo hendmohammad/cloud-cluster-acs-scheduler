@@ -33,7 +33,10 @@ public class Scheduler {
 
     public void RoundRobin(){
 
-        Process p = RRQueue.poll(); // to get the current "first" process, and remove it because if it is not finish its execution then it will be added to tier 2
+        Process p = RRQueue.peek(); // to get the current "first" process, but don't remove it
+        if (p.first_response_time == -1) {
+            p.first_response_time = curr_time;
+        }//calculate first response time
 
         // calculating execution time of that round of the process (remaining_time instead of burst bec. it's the value to be updated for further comparison)
         int execution_time;
@@ -52,11 +55,13 @@ public class Scheduler {
 
         // demotion logic
         if (p.remaining_time == 0){  // if remaining = 0, remove it from queue of tier 1
+            RRQueue.poll();
             p.finish_time= curr_time; //assign its finish time
             finished_p++; // increase finished processes
         }
 
         else {  // if not, move it to tier 2 queue >> priority , remaining
+           RRQueue.poll();
             p.tier2_enter_time = curr_time; //assign the time the process enters the Non_preemptive PriorityQueue (tier 2)
             PrQueue.add(p);
         }
