@@ -39,6 +39,9 @@ public class Scheduler {
     public void RoundRobin(){
 
         Process p = RRQueue.peek(); // to get the current "first" process, but don't remove it
+        if (p.first_response_time == -1) {
+         p.first_response_time = curr_time;
+                  }//calculate first response time
 
         // calculating execution time of that round of the process (remaining_time instead of burst bec. it's the value to be updated for further comparison)
         int execution_time;
@@ -52,6 +55,7 @@ public class Scheduler {
         if (p.remaining_time == 0){  // if remaining = 0, remove it from queue of tier 1 
             RRQueue.poll();
             finished_p++;
+            p.finish_time = curr_time + execution_time;
         }   
         else {                       // if not, move it to tier 2 queue >> priority , remaining
             RRQueue.poll();
@@ -68,6 +72,8 @@ public class Scheduler {
         curr_time += p.remaining_time;
         p.remaining_time = 0;
         finished_p++;
+
+         p.finish_time = curr_time;
 
     }
 

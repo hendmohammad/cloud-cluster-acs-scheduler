@@ -28,6 +28,7 @@ public class Main {
 
         Scheduler scheduler = new Scheduler(processes, RR_Q, CS);
         scheduler.Schedule();
+        MetricsReport.printReport(processes);
 
         input.close();
         
