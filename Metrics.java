@@ -24,9 +24,15 @@ public class Metrics {
             total+=turnaroundTime(p);
         }
         return (double)  total/processes.length;
-
-   
    }
+
+   public static double averageResponseTime(Process[] processes) {
+    int total = 0;
+    for (Process p : processes) {
+        total += responseTime(p);
+    }
+    return (double) total / processes.length;
+}
 
 
 }
