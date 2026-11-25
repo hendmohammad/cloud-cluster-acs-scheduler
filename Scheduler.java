@@ -15,6 +15,7 @@ public class Scheduler {
     int i = 0;           // used to loop on all the processes in the array (track what hasn't arrived yet) 
     int curr_time = 0;   // used to update time to check if it equals the arrival time of processes to enter RR_queue
     int finished_p = 0;  // to count the finished processes
+    Process last = null; // the last process that ran
 
     
     public Scheduler(Process[] processes, int quantum, int cs) {
@@ -39,6 +40,7 @@ public class Scheduler {
     public void RoundRobin(){
 
         Process p = RRQueue.peek(); // to get the current "first" process, but don't remove it
+        last = p;
 
         //calculate first response time
         if (p.first_response_time == -1) {
@@ -74,6 +76,7 @@ public class Scheduler {
     public void Demotion(){
 
         Process p = PrQueue.poll();
+        last = p;
         curr_time += p.remaining_time;
         p.remaining_time = 0;
         finished_p++;
@@ -98,7 +101,7 @@ public class Scheduler {
         while (!temp.isEmpty()) {
             PrQueue.add(temp.poll());
         }
-        
+
     }
 
     public void Schedule(){
@@ -121,8 +124,12 @@ public class Scheduler {
                 Aging();
             }
 
+            Process next;
+            if (!RRQueue.isEmpty()) next = RRQueue.peek();
+            else next = PrQueue.peek();
+
             // add cs time before the execution of the next process & also after aging calculations
-            if (!firstExecution) {
+            if (!firstExecution && next != last) { // guaranteed that the next process isn't the same last executed one
                 curr_time += context_switching;
             }
 
