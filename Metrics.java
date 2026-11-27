@@ -27,12 +27,10 @@ public class Metrics {
    }
 
    public static double averageResponseTime(Process[] processes) {
-    int total = 0;
-    for (Process p : processes) {
-        total += responseTime(p);
+        int total = 0;
+        for (Process p : processes) {
+            total += responseTime(p);
+        }
+        return (double) total / processes.length;
     }
-    return (double) total / processes.length;
-}
-
-
 }
