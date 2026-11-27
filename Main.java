@@ -28,11 +28,10 @@ public class Main {
 
         Scheduler scheduler = new Scheduler(processes, RR_Q, CS);
         scheduler.Schedule();
-        LogsReport.printReport(scheduler.logs);
-        MetricsReport.printReport(processes);
+        
+        Output.printReport(scheduler.tracer.logs, processes);
 
         input.close();
         
     }
 }
-
